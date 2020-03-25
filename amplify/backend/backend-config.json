@@ -1,0 +1,33 @@
+{
+	"api": {
+		"projecttracker": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"authConfig": {
+					"additionalAuthenticationProviders": [],
+					"defaultAuthentication": {
+						"authenticationType": "API_KEY",
+						"apiKeyConfig": {
+							"description": "Project Description",
+							"apiKeyExpirationDays": "180"
+						}
+					}
+				}
+			}
+		}
+	},
+	"auth": {
+		"projecttrackerd181a36e": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	},
+	"storage": {
+		"s3fe263a59": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
+		}
+	}
+}

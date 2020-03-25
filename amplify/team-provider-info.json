@@ -1,0 +1,20 @@
+{
+    "ptracker": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-projecttracker-ptracker-93904-authRole",
+            "UnauthRoleArn": "arn:aws:iam::312553601086:role/amplify-projecttracker-ptracker-93904-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::312553601086:role/amplify-projecttracker-ptracker-93904-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-projecttracker-ptracker-93904-deployment",
+            "UnauthRoleName": "amplify-projecttracker-ptracker-93904-unauthRole",
+            "StackName": "amplify-projecttracker-ptracker-93904",
+            "StackId": "arn:aws:cloudformation:us-east-1:312553601086:stack/amplify-projecttracker-ptracker-93904/81b02ef0-6c42-11ea-9a06-0e91a2a31d14",
+            "AmplifyAppId": "d33b5j0f1tv02g"
+        },
+        "categories": {
+            "auth": {
+                "projecttrackerd181a36e": {}
+            }
+        }
+    }
+}
