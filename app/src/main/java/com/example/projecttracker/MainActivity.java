@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnTrack;
     Button btnQuery;
     Button btnAbout;
+    Util util;
     public static List<Project> projects = new ArrayList<>();
 
     @Override
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.allProjectsList);
+        util = new Util();
 
         //getApplicationContext().startService(new Intent(getApplicationContext(), TransferService.class));
 
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 if(Constants.PROJECT_NUMBER > 0){
                     for(int i=1; i<=Constants.PROJECT_NUMBER; i++){
                         // Download all existing project files
-                        downloadWithTransferUtility(i);
+                        util.downloadWithTransferUtility(getApplicationContext(), i);
                     }
                     displayList(projects);
                 }
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+/*
     public void uploadWithTransferUtility(Project project){
         Constants.PROJECT_NUMBER++;
         int projectId = Constants.PROJECT_NUMBER;
@@ -88,15 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 .s3Client(new AmazonS3Client(AWSMobileClient.getInstance()))
                 .build();
         File file = new File(getApplicationContext().getFilesDir(), downloadChlidPath);
-        /*
-        try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.append("Howdy World!");
-            writer.close();
-        } catch (Exception e){
-            Log.e(TAG, e.getMessage());
-        }
-         */
+
         try{
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(project);
@@ -134,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void downloadWithTransferUtility(int projectId){
         String key = "public/project" + projectId + ".txt";
@@ -182,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+ */
 
     private void displayList(List<Project> allProjects){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
