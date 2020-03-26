@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.UserStateDetails;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnAbout;
     Util util;
     public static List<Project> projects = new ArrayList<>();
+    private AmazonS3Client sS3Client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +53,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.allProjectsList);
         util = new Util();
+        sS3Client = util.getS3Client(this);
+        projects = util.getAllProjectsFile(this);
+        displayList(projects);
 
         //getApplicationContext().startService(new Intent(getApplicationContext(), TransferService.class));
 
         // Initiate the AWSMobileClient if not initialized
+        /*
         AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>(){
             @Override
             public void onResult(UserStateDetails userStateDetails){
@@ -73,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Initialization error.", e);
             }
         });
-
+        */
     }
 
 /*

@@ -29,6 +29,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static com.example.projecttracker.MainActivity.projects;
@@ -43,6 +45,8 @@ public class Util {
     private AmazonS3Client sS3Client;
     private AWSCredentialsProvider sMobileClient;
     private TransferUtility sTransferUtility;
+    private List<S3ObjectSummary> s3ObjList;
+    List<Project> projects = new ArrayList<>();
 
     private AWSCredentialsProvider getCredProvider(Context context) {
         if (sMobileClient == null) {
@@ -74,7 +78,7 @@ public class Util {
             sS3Client = new AmazonS3Client(getCredProvider(context));
             try {
                 String regionString = new AWSConfiguration(context)
-                        .optJsonObject("S3TransferUtility")
+                        .optJsonObject("awsconfiguration")
                         .getString("Region");
                 sS3Client.setRegion(Region.getRegion(regionString));
             } catch (JSONException e) {
@@ -84,7 +88,7 @@ public class Util {
         return sS3Client;
     }
 
-    public TransferUtility getTransferUtility(Context context) {
+    private TransferUtility getTransferUtility(Context context) {
         if (sTransferUtility == null) {
             sTransferUtility = TransferUtility.builder()
                     .context(context)
@@ -96,14 +100,15 @@ public class Util {
         return sTransferUtility;
     }
 
-    public void downloadWithTransferUtility(Context context, int projectId){
-        String key = "public/project" + projectId + ".txt";
-        final String downloadChlidPath = "downloadFile" + projectId + ".txt";
+    public void downloadWithTransferUtility(Context context, String key){
+        //String key = "public/project" + projectId + ".txt";
+        //final String downloadChlidPath = "downloadFile" + projectId + ".txt";
+        final String filename = key;
         getTransferUtility(context);
         TransferObserver downloadObserver =
                 sTransferUtility.download(
                         key,
-                        new File(context.getFilesDir(), downloadChlidPath));
+                        new File(context.getFilesDir(), key));
         // Attach a listener to the observer to get state update and progress notification
         downloadObserver.setTransferListener(new TransferListener(){
             @Override
@@ -113,7 +118,7 @@ public class Util {
                     // extract project information from the downloaded file
                     Project p = new Project();
                     try{
-                        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(downloadChlidPath));
+                        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
                         p = (Project) ois.readObject();
                     } catch(Exception e){
                         e.printStackTrace();
@@ -144,13 +149,15 @@ public class Util {
         int projectId = Constants.PROJECT_NUMBER;
         String key = "public/projectFile" + projectId + ".txt";
         String downloadChlidPath = "downloadFile" + projectId + ".txt";
-
+        /*
         TransferUtility transferUtility =
                 TransferUtility.builder()
                         .context(context)
                         .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance()))
                         .build();
+        */
+        TransferUtility transferUtility = getTransferUtility(context);
         File file = new File(context.getFilesDir(), downloadChlidPath);
 
         try{
@@ -163,7 +170,7 @@ public class Util {
         TransferObserver uploadObserver =
                 transferUtility.upload(
                         key,
-                        new File(context.getFilesDir(), downloadChlidPath));
+                        file);
 
         // Attach a listener to the observer to get state update and progress notification
         uploadObserver.setTransferListener(new TransferListener() {
@@ -189,5 +196,19 @@ public class Util {
                 // handle errors
             }
         });
+        file.deleteOnExit();
+    }
+
+    private List<S3ObjectSummary> getFileList(){
+        // Queries files in the bucket from S3
+        s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
+        return s3ObjList;
+    }
+
+    public List<Project> getAllProjectsFile(Context context){
+        for(S3ObjectSummary summary : getFileList()){
+            downloadWithTransferUtility(context, summary.getKey());
+        }
+        return projects;
     }
 }
