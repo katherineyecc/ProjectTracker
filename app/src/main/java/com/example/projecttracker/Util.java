@@ -1,14 +1,17 @@
 package com.example.projecttracker;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.Callback;
 import com.amazonaws.mobile.client.UserStateDetails;
+import com.amazonaws.mobile.client.results.SignInResult;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.s3.transfermanager.TransferManager;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
@@ -16,6 +19,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -42,11 +46,16 @@ public class Util {
 
     public static final String TAG = Util.class.getSimpleName();
 
-    private AmazonS3Client sS3Client;
+    private static AmazonS3Client sS3Client;
     private AWSCredentialsProvider sMobileClient;
     private TransferUtility sTransferUtility;
     private List<S3ObjectSummary> s3ObjList;
+    private Context currentContext;
     List<Project> projects = new ArrayList<>();
+
+    public Util(Context context){
+        this.currentContext = context;
+    }
 
     private AWSCredentialsProvider getCredProvider(Context context) {
         if (sMobileClient == null) {
@@ -55,6 +64,7 @@ public class Util {
                 @Override
                 public void onResult(UserStateDetails result) {
                     latch.countDown();
+                    System.out.println("Current Status: " + result.getUserState());
                 }
 
                 @Override
@@ -70,21 +80,33 @@ public class Util {
                 e.printStackTrace();
             }
         }
+        System.out.println("End of getCredProvider!");
         return sMobileClient;
+    }
+
+    private CognitoCachingCredentialsProvider getCognitoCredProvider(Context context){
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                context,
+                "us-east-1:07ead51f-783d-4d1f-bad6-b99c05e7b0b8", // Identity pool ID
+                Regions.US_EAST_1 // Region
+        );
+        return credentialsProvider;
     }
 
     public AmazonS3Client getS3Client(Context context) {
         if (sS3Client == null) {
-            sS3Client = new AmazonS3Client(getCredProvider(context));
             try {
                 String regionString = new AWSConfiguration(context)
-                        .optJsonObject("awsconfiguration")
+                        .optJsonObject("S3TransferUtility")
                         .getString("Region");
-                sS3Client.setRegion(Region.getRegion(regionString));
+                //sS3Client.setRegion(Region.getRegion(regionString));
+                sS3Client = new AmazonS3Client(getCredProvider(context), Region.getRegion(regionString));
+                //sS3Client = new AmazonS3Client(getCognitoCredProvider(context), Region.getRegion(regionString));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("End of getS3Client!");
         return sS3Client;
     }
 
@@ -96,7 +118,6 @@ public class Util {
                     .awsConfiguration(new AWSConfiguration(context))
                     .build();
         }
-
         return sTransferUtility;
     }
 
@@ -198,9 +219,11 @@ public class Util {
         });
         file.deleteOnExit();
     }
-
+/*
     private List<S3ObjectSummary> getFileList(){
         // Queries files in the bucket from S3
+        String bucketLocatoin = sS3Client.getBucketLocation("myprojecttrackerbucket");
+        System.out.println("Bucket Location is: " + bucketLocatoin);
         s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
         return s3ObjList;
     }
@@ -211,4 +234,31 @@ public class Util {
         }
         return projects;
     }
+ */
+    private class GetFileListTask extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected void onPreExecute(){
+            // ...
+        }
+
+        @Override
+        protected Void doInBackground(Void... inputs){
+            s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
+            for(S3ObjectSummary summary : s3ObjList){
+                downloadWithTransferUtility(currentContext, summary.getKey());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            // ...
+        }
+    }
+
+    public List<Project> getAllProjectsFile(Context context){
+        new GetFileListTask().execute();
+        return projects;
+    }
+
 }

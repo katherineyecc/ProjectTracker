@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.allProjectsList);
-        util = new Util();
+        util = new Util(this);
         sS3Client = util.getS3Client(this);
         projects = util.getAllProjectsFile(this);
         displayList(projects);
