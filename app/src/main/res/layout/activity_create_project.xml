@@ -6,4 +6,145 @@
     android:layout_height="match_parent"
     tools:context=".CreateProject">
 
+    <TextView
+        android:id="@+id/cfixDescription"
+        android:layout_width="127dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Description: "
+        android:inputType="textMultiLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cfixStatus" />
+
+    <EditText
+        android:id="@+id/cdescription"
+        android:layout_width="378dp"
+        android:layout_height="164dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cfixDescription" />
+
+    <TextView
+        android:id="@+id/cfixStatus"
+        android:layout_width="127dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        android:text="Status: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cfixDueDate" />
+
+    <CheckedTextView
+        android:id="@+id/cstatus"
+        android:layout_width="232dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="11dp"
+        android:text="Completed"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cfixStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cfixStatus"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"/>
+
+    <TextView
+        android:id="@+id/cfixDueDate"
+        android:layout_width="127dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
+        android:text="Due Date: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cfixInstructorName" />
+
+    <EditText
+        android:id="@+id/cdueDate"
+        android:layout_width="232dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="11dp"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cfixDueDate"
+        app:layout_constraintTop_toBottomOf="@+id/cinstructorName" />
+
+
+    <TextView
+        android:id="@+id/cfixInstructorName"
+        android:layout_width="127dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:text="Instructor Name:"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cinstructorName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/cinstructorName"
+        android:layout_width="232dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cfixInstructorName"
+        app:layout_constraintTop_toBottomOf="@+id/ccourseName" />
+
+    <TextView
+        android:id="@+id/cfixCourseName"
+        android:layout_width="127dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
+        android:text="Course Name: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cfixProjectNo" />
+
+    <EditText
+        android:id="@+id/ccourseName"
+        android:layout_width="232dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cfixCourseName"
+        app:layout_constraintTop_toBottomOf="@+id/cprojectNo" />
+
+    <TextView
+        android:id="@+id/cfixProjectNo"
+        android:layout_width="128dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:text="Project No: "
+        app:layout_constraintBaseline_toBaselineOf="@+id/cprojectNo"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/cprojectNo"
+        android:layout_width="232dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cfixProjectNo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btncCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="16dp"
+        android:text="Create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cdescription" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

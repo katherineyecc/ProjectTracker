@@ -27,7 +27,7 @@ public class Detail extends AppCompatActivity {
     TextView description;
     Button btnModify;
     Button btnDelete;
-    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +37,19 @@ public class Detail extends AppCompatActivity {
         Intent i = getIntent();
         id = i.getIntExtra("ID", 0);
         Project p = MainActivity.projects.get(id-1);
-        fixProjectNo = findViewById(R.id.fixProjectNo);
-        fixCourseName = findViewById(R.id.fixCourseName);
-        fixInstructorName = findViewById(R.id.fixInstructorName);
-        fixDueDate = findViewById(R.id.fixDueDate);
-        fixStatus = findViewById(R.id.fixStatus);
-        fixDescription = findViewById(R.id.fixDescription);
-        projectNo = findViewById(R.id.projectNo);
-        courseName = findViewById(R.id.courseName);
-        instructorName = findViewById(R.id.instructorName);
-        dueDate = findViewById(R.id.dueDate);
-        status = findViewById(R.id.status);
-        description = findViewById(R.id.descrption);
-        btnModify = findViewById(R.id.btnModify);
+        fixProjectNo = findViewById(R.id.cfixProjectNo);
+        fixCourseName = findViewById(R.id.cfixCourseName);
+        fixInstructorName = findViewById(R.id.cfixInstructorName);
+        fixDueDate = findViewById(R.id.cfixDueDate);
+        fixStatus = findViewById(R.id.cfixStatus);
+        fixDescription = findViewById(R.id.cfixDescription);
+        projectNo = findViewById(R.id.cprojectNo);
+        courseName = findViewById(R.id.ccourseName);
+        instructorName = findViewById(R.id.cinstructorName);
+        dueDate = findViewById(R.id.cdueDate);
+        status = findViewById(R.id.cstatus);
+        description = findViewById(R.id.cdescription);
+        btnModify = findViewById(R.id.btncCreate);
         btnDelete = findViewById(R.id.btnDelete);
 
         projectNo.setText(p.getProjectNumber());

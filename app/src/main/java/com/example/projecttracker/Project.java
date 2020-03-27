@@ -13,6 +13,12 @@ public class Project implements java.io.Serializable{
     private String studentName;
     private Boolean isCompleted = false;
 
+    public Project(int projectID){
+        this.projectNumber = Integer.toString(projectID);
+    }
+
+    public Project(){}
+
     public String getProjectNumber(){
         return projectNumber;
     }

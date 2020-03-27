@@ -7,129 +7,129 @@
     tools:context=".Detail">
 
     <TextView
-        android:id="@+id/fixDescription"
+        android:id="@+id/cfixDescription"
         android:layout_width="127dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Description: "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fixStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/cfixStatus" />
 
     <TextView
-        android:id="@+id/descrption"
+        android:id="@+id/cdescription"
         android:layout_width="378dp"
         android:layout_height="125dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fixDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/cfixDescription" />
 
     <TextView
-        android:id="@+id/fixStatus"
+        android:id="@+id/cfixStatus"
         android:layout_width="127dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="25dp"
         android:text="Status: "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fixDueDate" />
+        app:layout_constraintTop_toBottomOf="@+id/cfixDueDate" />
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/cstatus"
         android:layout_width="232dp"
         android:layout_height="41dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="11dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fixStatus"
-        app:layout_constraintTop_toBottomOf="@+id/dueDate" />
+        app:layout_constraintStart_toEndOf="@+id/cfixStatus"
+        app:layout_constraintTop_toBottomOf="@+id/cdueDate" />
 
     <TextView
-        android:id="@+id/fixDueDate"
+        android:id="@+id/cfixDueDate"
         android:layout_width="127dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="26dp"
         android:text="Due Date: "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fixInstructorName" />
+        app:layout_constraintTop_toBottomOf="@+id/cfixInstructorName" />
 
     <TextView
-        android:id="@+id/dueDate"
+        android:id="@+id/cdueDate"
         android:layout_width="232dp"
         android:layout_height="41dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="11dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fixDueDate"
-        app:layout_constraintTop_toBottomOf="@+id/instructorName" />
+        app:layout_constraintStart_toEndOf="@+id/cfixDueDate"
+        app:layout_constraintTop_toBottomOf="@+id/cinstructorName" />
 
     <TextView
-        android:id="@+id/fixInstructorName"
+        android:id="@+id/cfixInstructorName"
         android:layout_width="127dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
         android:text="Instructor Name:"
-        app:layout_constraintBaseline_toBaselineOf="@+id/instructorName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cinstructorName"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/instructorName"
+        android:id="@+id/cinstructorName"
         android:layout_width="232dp"
         android:layout_height="41dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="11dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fixInstructorName"
-        app:layout_constraintTop_toBottomOf="@+id/courseName" />
+        app:layout_constraintStart_toEndOf="@+id/cfixInstructorName"
+        app:layout_constraintTop_toBottomOf="@+id/ccourseName" />
 
     <TextView
-        android:id="@+id/fixCourseName"
+        android:id="@+id/cfixCourseName"
         android:layout_width="127dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="19dp"
         android:text="Course Name: "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fixProjectNo" />
+        app:layout_constraintTop_toBottomOf="@+id/cfixProjectNo" />
 
     <TextView
-        android:id="@+id/courseName"
+        android:id="@+id/ccourseName"
         android:layout_width="232dp"
         android:layout_height="40dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="17dp"
         android:layout_marginEnd="11dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fixCourseName"
-        app:layout_constraintTop_toBottomOf="@+id/projectNo" />
+        app:layout_constraintStart_toEndOf="@+id/cfixCourseName"
+        app:layout_constraintTop_toBottomOf="@+id/cprojectNo" />
 
     <TextView
-        android:id="@+id/fixProjectNo"
+        android:id="@+id/cfixProjectNo"
         android:layout_width="128dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
         android:text="Project No: "
-        app:layout_constraintBaseline_toBaselineOf="@+id/projectNo"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cprojectNo"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/projectNo"
+        android:id="@+id/cprojectNo"
         android:layout_width="232dp"
         android:layout_height="41dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fixProjectNo"
+        app:layout_constraintStart_toEndOf="@+id/cfixProjectNo"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnModify"
+        android:id="@+id/btncCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -150,6 +150,6 @@
         android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnModify" />
+        app:layout_constraintStart_toEndOf="@+id/btncCreate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

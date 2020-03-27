@@ -169,9 +169,8 @@ public class Util {
     }
 
     public void uploadWithTransferUtility(Context context, Project project){
-        Constants.PROJECT_NUMBER++;
         int projectId = Constants.PROJECT_NUMBER;
-        String key = "public/projectFile" + projectId + ".txt";
+        String key = "projectFile" + projectId + ".txt";
         String downloadChlidPath = "downloadFile" + projectId + ".txt";
         /*
         TransferUtility transferUtility =
@@ -220,24 +219,10 @@ public class Util {
                 // handle errors
             }
         });
+        Constants.PROJECT_NUMBER++;
         file.deleteOnExit();
     }
-/*
-    private List<S3ObjectSummary> getFileList(){
-        // Queries files in the bucket from S3
-        String bucketLocatoin = sS3Client.getBucketLocation("myprojecttrackerbucket");
-        System.out.println("Bucket Location is: " + bucketLocatoin);
-        s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
-        return s3ObjList;
-    }
 
-    public List<Project> getAllProjectsFile(Context context){
-        for(S3ObjectSummary summary : getFileList()){
-            downloadWithTransferUtility(context, summary.getKey());
-        }
-        return projects;
-    }
- */
     private class GetFileListTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected void onPreExecute(){

@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    //private static Bundle bundle;
     private AWSAppSyncClient mAWSAppSyncClient;
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -57,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(savedInstanceState != null){
+            Constants.PROJECT_NUMBER = savedInstanceState.getInt("projectNumber");
+            System.out.println("bundle number: "+savedInstanceState.getInt("projectNumber"));
+        }
         recyclerView = findViewById(R.id.allProjectsList);
         btnCreate = findViewById(R.id.btnCreate);
         btnTrack = findViewById(R.id.btnTrack);
@@ -109,5 +114,25 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new Adapter(this, allProjects);
         recyclerView.setAdapter(adapter);
+    }
+/*
+    @Override protected void onPause(){
+        super.onPause();
+        if(bundle != null){
+            bundle.clear();
+            bundle = null;
+        }
+        bundle = new Bundle();
+        bundle.putInt("projectNumber", Constants.PROJECT_NUMBER);
+    }
+*/
+    @Override public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putInt("projectNumber", Constants.PROJECT_NUMBER);
+    }
+
+    @Override public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        Constants.PROJECT_NUMBER = savedInstanceState.getInt("projectNumber");
     }
 }
