@@ -50,7 +50,7 @@ public class CreateProject extends AppCompatActivity {
         project = new Project(currentProjectNum);
         initUI();
         util = new Util(this);
-        sS3Client = util.getS3Client(this);
+        sS3Client = util.getS3Client();
     }
 
     public void initUI(){
@@ -94,7 +94,7 @@ public class CreateProject extends AppCompatActivity {
     }
 
     public void uploadProject(){
-        util.uploadWithTransferUtility(this, project);
+        util.uploadWithTransferUtility(project);
         onBackPressed();
         Toast.makeText(this, "Project Created.", Toast.LENGTH_SHORT).show();
     }

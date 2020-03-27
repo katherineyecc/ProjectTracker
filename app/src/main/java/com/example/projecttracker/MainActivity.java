@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
     Button btnQuery;
     Button btnAbout;
     Util util;
-    public static List<Project> projects = new ArrayList<>();
+    static List<Project> projects = new ArrayList<>();
     private AlertDialog alert = null;
     private AlertDialog.Builder builder = null;
-    private AmazonS3Client sS3Client;
+    //private AmazonS3Client sS3Client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +107,10 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
             }
         });
-        util = new Util(this);
-        sS3Client = util.getS3Client(this);
-        projects = util.getAllProjectsFile(this);
+        util = new Util(getApplicationContext());
+        //sS3Client = util.getS3Client();
+        util.getAllProjectsFile();
+        System.out.println("The projects arraylist size is: "+projects.size());
         displayList(projects);
     }
 

@@ -2,6 +2,9 @@ package com.example.projecttracker;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -37,11 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import static com.example.projecttracker.MainActivity.projects;
 
 public class Util {
-    private static String AWS_ACCESS_KEY = "AKIAURRNFPA7DRINWVVA";
-    private static String AWS_SECRET_KEY = "adnGPSPhBbFRPF7oMKHdvAezstBHjkRHy8V5f5tV";
+
     private static final String bucketName = "myprojecttrackerbucket";
 
     public static final String TAG = Util.class.getSimpleName();
@@ -50,14 +51,17 @@ public class Util {
     private AWSCredentialsProvider sMobileClient;
     private TransferUtility sTransferUtility;
     private List<S3ObjectSummary> s3ObjList;
-    private Context currentContext;
+    private Context context;
+    private boolean downloadCompleted = false;
+    //private CountDownLatch clatch = new CountDownLatch(1);
     List<Project> projects = new ArrayList<>();
 
     public Util(Context context){
-        this.currentContext = context;
+        this.context = context;
+        getTransferUtility();
     }
 
-    private AWSCredentialsProvider getCredProvider(Context context) {
+    private AWSCredentialsProvider getCredProvider() {
         if (sMobileClient == null) {
             final CountDownLatch latch = new CountDownLatch(1);
             AWSMobileClient.getInstance().initialize(context, new Callback<UserStateDetails>() {
@@ -93,14 +97,14 @@ public class Util {
         return credentialsProvider;
     }
 
-    public AmazonS3Client getS3Client(Context context) {
+    public AmazonS3Client getS3Client() {
         if (sS3Client == null) {
             try {
                 String regionString = new AWSConfiguration(context)
                         .optJsonObject("S3TransferUtility")
                         .getString("Region");
                 //sS3Client.setRegion(Region.getRegion(regionString));
-                sS3Client = new AmazonS3Client(getCredProvider(context), Region.getRegion(regionString));
+                sS3Client = new AmazonS3Client(getCredProvider(), Region.getRegion(regionString));
                 //sS3Client = new AmazonS3Client(getCognitoCredProvider(context), Region.getRegion(regionString));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -110,23 +114,25 @@ public class Util {
         return sS3Client;
     }
 
-    private TransferUtility getTransferUtility(Context context) {
+    private void getTransferUtility() {
         if (sTransferUtility == null) {
             sTransferUtility = TransferUtility.builder()
                     .context(context)
-                    .s3Client(getS3Client(context))
+                    .s3Client(getS3Client())
                     .awsConfiguration(new AWSConfiguration(context))
                     .build();
         }
-        return sTransferUtility;
+        //return sTransferUtility;
     }
 
-    public void downloadWithTransferUtility(Context context, String key){
+    public void downloadWithTransferUtility(String key){
         //String key = "public/project" + projectId + ".txt";
         //final String downloadChlidPath = "downloadFile" + projectId + ".txt";
         //final String filename = context.getFilesDir() + key;
         //System.out.println("filename = key : " + filename);
-        getTransferUtility(context);
+        System.out.println("Start downloading...");
+        //getTransferUtility();
+        //final CountDownLatch latch = new CountDownLatch(1);
         final File file = new File(context.getFilesDir(), key);
         System.out.println("file path: " + file.getPath());
         TransferObserver downloadObserver =
@@ -140,6 +146,7 @@ public class Util {
                 if(TransferState.COMPLETED == state){
                     // handle a completed download
                     // extract project information from the downloaded file
+                    System.out.println("TransferState is COMPLETED!");
                     Project p = new Project();
                     try{
                         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
@@ -147,7 +154,14 @@ public class Util {
                     } catch(Exception e){
                         e.printStackTrace();
                     }
-                    projects.add(p);
+                    MainActivity.projects.add(p);
+                    System.out.println("Util projects arraylist size: "+MainActivity.projects.size());
+                    //latch.countDown();
+                }
+                else if(TransferState.WAITING_FOR_NETWORK == state){
+                    System.out.println("Download is waiting for the network...");
+                } else {
+                    System.out.println("Download is in other status...");
                 }
             }
 
@@ -164,11 +178,19 @@ public class Util {
             @Override
             public void onError(int id, Exception e){
                 // handle errors
+                System.out.println("DownloadError happens!");
             }
         });
+        /*try{
+            System.out.println("Latch waiting...");
+            latch.await();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }*/
+        System.out.println("Downloading Ends!");
     }
 
-    public void uploadWithTransferUtility(Context context, Project project){
+    public void uploadWithTransferUtility(Project project){
         int projectId = Constants.PROJECT_NUMBER;
         String key = "projectFile" + projectId + ".txt";
         String downloadChlidPath = "downloadFile" + projectId + ".txt";
@@ -180,7 +202,7 @@ public class Util {
                         .s3Client(new AmazonS3Client(AWSMobileClient.getInstance()))
                         .build();
         */
-        TransferUtility transferUtility = getTransferUtility(context);
+        //TransferUtility transferUtility = getTransferUtility();
         File file = new File(context.getFilesDir(), downloadChlidPath);
 
         try{
@@ -191,7 +213,7 @@ public class Util {
         }
 
         TransferObserver uploadObserver =
-                transferUtility.upload(
+                sTransferUtility.upload(
                         key,
                         file);
 
@@ -222,31 +244,56 @@ public class Util {
         Constants.PROJECT_NUMBER++;
         file.deleteOnExit();
     }
-
+/*
     private class GetFileListTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected void onPreExecute(){
-            // ...
+
         }
 
         @Override
         protected Void doInBackground(Void... inputs){
             s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
             for(S3ObjectSummary summary : s3ObjList){
-                downloadWithTransferUtility(currentContext, summary.getKey());
+                downloadWithTransferUtility(summary.getKey());
             }
+            System.out.println("DOWNLOAD Finished");
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
-            // ...
+            downloadCompleted = true;
+            System.out.println("IN ASYNCTASK, TASK FINISHED.");
+            clatch.countDown();
+
         }
     }
+*/
+    public void getAllProjectsFile(){
+        final CountDownLatch clatch = new CountDownLatch(1);
+        //new GetFileListTask().execute();
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+                System.out.println("Getting buckets and summaries...");
+                s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
+                for(S3ObjectSummary summary : s3ObjList){
+                    downloadWithTransferUtility(summary.getKey());
 
-    public List<Project> getAllProjectsFile(Context context){
-        new GetFileListTask().execute();
-        return projects;
+                }
+                System.out.println("countDownLatch -1");
+                clatch.countDown();
+            }
+        }).start();
+
+        try{
+            System.out.println("STILL WAITING...");
+            clatch.await();
+            System.out.println("WAITING ENDS!");
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
     }
 
 }
