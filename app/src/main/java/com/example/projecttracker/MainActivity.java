@@ -1,13 +1,17 @@
 package com.example.projecttracker;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnAbout;
     Util util;
     public static List<Project> projects = new ArrayList<>();
+    private AlertDialog alert = null;
+    private AlertDialog.Builder builder = null;
     private AmazonS3Client sS3Client;
 
     @Override
@@ -52,138 +58,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.allProjectsList);
+        btnCreate = findViewById(R.id.btnCreate);
+        btnTrack = findViewById(R.id.btnTrack);
+        btnQuery = findViewById(R.id.btnQuery);
+        btnAbout = findViewById(R.id.btnAbout);
+        btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), CreateProject.class);
+                intent.putExtra("ProjectNumber", Constants.PROJECT_NUMBER);
+                view.getContext().startActivity(intent);
+            }
+        });
+        btnTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Track the completed projects
+            }
+        });
+        btnQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // another interface to allow queries on the projects
+            }
+        });
+        btnAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // pop up name and email
+                alert = null;
+                builder = new AlertDialog.Builder(MainActivity.this);
+                alert = builder.setTitle("About Us")
+                        .setMessage("Developers: Sonal, Chuchu\nEmails: cye041@uottawa.ca")
+                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // do not need operations
+                            }
+                        }).create();
+                alert.show();
+            }
+        });
         util = new Util(this);
         sS3Client = util.getS3Client(this);
         projects = util.getAllProjectsFile(this);
         displayList(projects);
-
-        //getApplicationContext().startService(new Intent(getApplicationContext(), TransferService.class));
-
-        // Initiate the AWSMobileClient if not initialized
-        /*
-        AWSMobileClient.getInstance().initialize(getApplicationContext(), new Callback<UserStateDetails>(){
-            @Override
-            public void onResult(UserStateDetails userStateDetails){
-                Log.i(TAG, "AWSMobileClient initialized. User State is " + userStateDetails.getUserState());
-                if(Constants.PROJECT_NUMBER > 0){
-                    for(int i=1; i<=Constants.PROJECT_NUMBER; i++){
-                        // Download all existing project files
-                        util.downloadWithTransferUtility(getApplicationContext(), i);
-                    }
-                    displayList(projects);
-                }
-            }
-
-            @Override
-            public void onError(Exception e){
-                Log.e(TAG, "Initialization error.", e);
-            }
-        });
-        */
     }
-
-/*
-    public void uploadWithTransferUtility(Project project){
-        Constants.PROJECT_NUMBER++;
-        int projectId = Constants.PROJECT_NUMBER;
-        String key = "public/projectFile" + projectId + ".txt";
-        String downloadChlidPath = "downloadFile" + projectId + ".txt";
-
-        TransferUtility transferUtility =
-                TransferUtility.builder()
-                .context(getApplicationContext())
-                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
-                .s3Client(new AmazonS3Client(AWSMobileClient.getInstance()))
-                .build();
-        File file = new File(getApplicationContext().getFilesDir(), downloadChlidPath);
-
-        try{
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-            oos.writeObject(project);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-
-        TransferObserver uploadObserver =
-                transferUtility.upload(
-                        key,
-                        new File(getApplicationContext().getFilesDir(), downloadChlidPath));
-
-        // Attach a listener to the observer to get state update and progress notification
-        uploadObserver.setTransferListener(new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state){
-                if(TransferState.COMPLETED == state){
-                    // handle a completed upload
-                }
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                float percentDonef = ((float)bytesCurrent / (float)bytesTotal) * 100;
-                int percentDone = (int)percentDonef;
-
-                Log.d(TAG, "ID:" + id + "bytesCurrent: " + bytesCurrent
-                    + " bytesTotal: " + bytesTotal + " " +
-                        percentDone + "%");
-            }
-
-            @Override
-            public void onError(int id, Exception e){
-                // handle errors
-            }
-        });
-    }
-
-
-    public void downloadWithTransferUtility(int projectId){
-        String key = "public/project" + projectId + ".txt";
-        final String downloadChlidPath = "downloadFile" + projectId + ".txt";
-        TransferUtility transferUtility =
-                TransferUtility.builder()
-                .context(getApplicationContext())
-                .awsConfiguration((AWSMobileClient.getInstance().getConfiguration()))
-                .s3Client(new AmazonS3Client(AWSMobileClient.getInstance()))
-                .build();
-        TransferObserver downloadObserver =
-                transferUtility.download(
-                        key,
-                        new File(getApplicationContext().getFilesDir(), downloadChlidPath));
-        // Attach a listener to the observer to get state update and progress notification
-        downloadObserver.setTransferListener(new TransferListener(){
-            @Override
-            public void onStateChanged(int id, TransferState state){
-                if(TransferState.COMPLETED == state){
-                    // handle a completed download
-                    // extract project information from the downloaded file
-                    Project p = new Project();
-                    try{
-                        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(downloadChlidPath));
-                        p = (Project) ois.readObject();
-                    } catch(Exception e){
-                        e.printStackTrace();
-                    }
-                    projects.add(p);
-                }
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal){
-                float percentDonef = ((float)bytesCurrent/(float)bytesTotal)*100;
-                int percentDone = (int)percentDonef;
-
-                Log.d("Your Activity", " ID:" + id + " bytesCurrent: "
-                    + bytesCurrent + " bytesTotal: " + bytesTotal + " " + percentDone
-                    + "%");
-            }
-
-            @Override
-            public void onError(int id, Exception e){
-                // handle errors
-            }
-        });
-    }
- */
 
     private void displayList(List<Project> allProjects){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

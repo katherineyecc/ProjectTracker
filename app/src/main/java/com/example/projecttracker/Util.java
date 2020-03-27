@@ -124,12 +124,15 @@ public class Util {
     public void downloadWithTransferUtility(Context context, String key){
         //String key = "public/project" + projectId + ".txt";
         //final String downloadChlidPath = "downloadFile" + projectId + ".txt";
-        final String filename = key;
+        //final String filename = context.getFilesDir() + key;
+        //System.out.println("filename = key : " + filename);
         getTransferUtility(context);
+        final File file = new File(context.getFilesDir(), key);
+        System.out.println("file path: " + file.getPath());
         TransferObserver downloadObserver =
                 sTransferUtility.download(
                         key,
-                        new File(context.getFilesDir(), key));
+                        file);
         // Attach a listener to the observer to get state update and progress notification
         downloadObserver.setTransferListener(new TransferListener(){
             @Override
@@ -139,7 +142,7 @@ public class Util {
                     // extract project information from the downloaded file
                     Project p = new Project();
                     try{
-                        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
+                        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
                         p = (Project) ois.readObject();
                     } catch(Exception e){
                         e.printStackTrace();
