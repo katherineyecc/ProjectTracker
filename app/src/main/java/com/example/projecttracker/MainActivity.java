@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,14 +27,18 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +63,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(savedInstanceState != null){
-            Constants.PROJECT_NUMBER = savedInstanceState.getInt("projectNumber");
-            System.out.println("bundle number: "+savedInstanceState.getInt("projectNumber"));
-        }
+        readConstant();
+
         recyclerView = findViewById(R.id.allProjectsList);
         btnCreate = findViewById(R.id.btnCreate);
         btnTrack = findViewById(R.id.btnTrack);
@@ -115,24 +118,44 @@ public class MainActivity extends AppCompatActivity {
         adapter = new Adapter(this, allProjects);
         recyclerView.setAdapter(adapter);
     }
-/*
-    @Override protected void onPause(){
-        super.onPause();
-        if(bundle != null){
-            bundle.clear();
-            bundle = null;
-        }
-        bundle = new Bundle();
-        bundle.putInt("projectNumber", Constants.PROJECT_NUMBER);
-    }
-*/
-    @Override public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        outState.putInt("projectNumber", Constants.PROJECT_NUMBER);
+
+    @Override
+    protected void onDestroy(){
+        save(Constants.PROJECT_NUMBER);
+        super.onDestroy();
     }
 
-    @Override public void onRestoreInstanceState(Bundle savedInstanceState){
-        super.onRestoreInstanceState(savedInstanceState);
-        Constants.PROJECT_NUMBER = savedInstanceState.getInt("projectNumber");
+    public void save(int i){
+        FileOutputStream out = null;
+        BufferedWriter writer = null;
+        try{
+            out = openFileOutput("data_store", Context.MODE_PRIVATE);
+            writer = new BufferedWriter(new OutputStreamWriter(out));
+            writer.write(i);
+            writer.close();
+            //System.out.println("Data stored in file.");
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void readConstant(){
+        int projectNumber;
+        FileInputStream fis = null;
+        BufferedReader reader = null;
+        try{
+            fis = openFileInput("data_store");
+            reader = new BufferedReader(new InputStreamReader(fis));
+            projectNumber = reader.read();
+            reader.close();
+            Constants.PROJECT_NUMBER = projectNumber;
+            //System.out.println("Data retrieved from file. The projectNumber is: " + projectNumber);
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
