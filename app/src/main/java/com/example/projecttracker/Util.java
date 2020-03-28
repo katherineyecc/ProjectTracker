@@ -26,6 +26,8 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import org.json.JSONException;
@@ -87,7 +89,7 @@ public class Util {
         System.out.println("End of getCredProvider!");
         return sMobileClient;
     }
-
+/*
     private CognitoCachingCredentialsProvider getCognitoCredProvider(Context context){
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 context,
@@ -96,7 +98,7 @@ public class Util {
         );
         return credentialsProvider;
     }
-
+*/
     public AmazonS3Client getS3Client() {
         if (sS3Client == null) {
             try {
@@ -121,6 +123,7 @@ public class Util {
                     .s3Client(getS3Client())
                     .awsConfiguration(new AWSConfiguration(context))
                     .build();
+            System.out.println("Building TransferUtility!");
         }
         //return sTransferUtility;
     }
@@ -270,6 +273,8 @@ public class Util {
         }
     }
 */
+
+/*
     public void getAllProjectsFile(){
         final CountDownLatch clatch = new CountDownLatch(1);
         //new GetFileListTask().execute();
@@ -294,6 +299,44 @@ public class Util {
         }catch(InterruptedException e){
             e.printStackTrace();
         }
+    }
+*/
+
+    public List<Project> getAllProjectsFile(){
+        final CountDownLatch clatch = new CountDownLatch(1);
+        //new GetFileListTask().execute();
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+                System.out.println("Getting buckets and summaries...");
+                s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
+                for(S3ObjectSummary summary : s3ObjList){
+                    //downloadWithTransferUtility(summary.getKey());
+                    S3Object s3Object = sS3Client.getObject(bucketName, summary.getKey());
+                    Project p = new Project();
+                    try{
+                        ObjectInputStream ois = new ObjectInputStream(
+                                new S3ObjectInputStream(s3Object.getObjectContent()));
+                        p = (Project) ois.readObject();
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    projects.add(p);
+                    //System.out.println("Project File course name: "+projects.get(0).getCourseTitle());
+                }
+                System.out.println("countDownLatch -1");
+                clatch.countDown();
+            }
+        }).start();
+
+        try{
+            System.out.println("STILL WAITING...");
+            clatch.await();
+            System.out.println("WAITING ENDS!");
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+        return projects;
     }
 
 }

@@ -109,14 +109,16 @@ public class MainActivity extends AppCompatActivity {
         });
         util = new Util(getApplicationContext());
         //sS3Client = util.getS3Client();
-        util.getAllProjectsFile();
+        projects = util.getAllProjectsFile();
         System.out.println("The projects arraylist size is: "+projects.size());
+        System.out.println("Project File course name: "+projects.get(0).getCourseTitle());
         displayList(projects);
     }
 
     private void displayList(List<Project> allProjects){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new Adapter(this, allProjects);
+        System.out.println("After init Adapter");
         recyclerView.setAdapter(adapter);
     }
 
