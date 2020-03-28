@@ -26,6 +26,8 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -36,10 +38,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 
@@ -54,7 +59,7 @@ public class Util {
     private TransferUtility sTransferUtility;
     private List<S3ObjectSummary> s3ObjList;
     private Context context;
-    List<Project> projects = new ArrayList<>();
+    Map<Integer, Project> projects = new HashMap<>();
 
     public Util(Context context){
         this.context = context;
@@ -125,7 +130,7 @@ public class Util {
         }
         //return sTransferUtility;
     }
-
+/*
     public void downloadWithTransferUtility(String key){
         //String key = "public/project" + projectId + ".txt";
         //final String downloadChlidPath = "downloadFile" + projectId + ".txt";
@@ -187,10 +192,10 @@ public class Util {
             latch.await();
         }catch(InterruptedException e){
             e.printStackTrace();
-        }*/
+        }
         System.out.println("Downloading Ends!");
     }
-
+*/
     public void uploadWithTransferUtility(Project project){
         int projectId = Constants.PROJECT_NUMBER;
         String key = "projectFile" + projectId + ".txt";
@@ -300,12 +305,13 @@ public class Util {
     }
 */
 
-    public List<Project> getAllProjectsFile(){
+    public Map<Integer, Project> getAllProjectsFile(){
         final CountDownLatch clatch = new CountDownLatch(1);
         //new GetFileListTask().execute();
         new Thread(new Runnable(){
             @Override
             public void run(){
+                int index = 0;
                 System.out.println("Getting buckets and summaries...");
                 s3ObjList = sS3Client.listObjects(bucketName).getObjectSummaries();
                 for(S3ObjectSummary summary : s3ObjList){
@@ -316,10 +322,12 @@ public class Util {
                         ObjectInputStream ois = new ObjectInputStream(
                                 new S3ObjectInputStream(s3Object.getObjectContent()));
                         p = (Project) ois.readObject();
+                        //index = Integer.parseInt(p.getProjectNumber());
                     } catch(Exception e){
                         e.printStackTrace();
                     }
-                    projects.add(p);
+                    projects.put(index, p);
+                    index++;
                     //System.out.println("Project File course name: "+projects.get(0).getCourseTitle());
                 }
                 System.out.println("countDownLatch -1");
@@ -340,6 +348,34 @@ public class Util {
     public void deleteProject(String key){
         sS3Client.deleteObject(bucketName, key);
         System.out.println("Deleting the project...");
+    }
+
+    public Project getProject(String key){
+        S3Object s3Object = sS3Client.getObject(bucketName, key);
+        Project p = new Project();
+        try{
+            ObjectInputStream ois = new ObjectInputStream(
+                    new S3ObjectInputStream(s3Object.getObjectContent()));
+            p = (Project) ois.readObject();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return p;
+    }
+
+    public void uploadProjectObject(String key, Project p){
+        File file = new File(context.getFilesDir(), key);
+        try{
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+            oos.writeObject(p);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        PutObjectRequest por = new PutObjectRequest(bucketName, key, file);
+        por.withKey(key);
+        por.withFile(file);
+        sS3Client.putObject(por);
+        file.deleteOnExit();
     }
 
 }

@@ -41,7 +41,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     //private static Bundle bundle;
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnQuery;
     Button btnAbout;
     static Util util;
-    static List<Project> projects = new ArrayList<>();
+    //static Map<Integer, Project> projects = new HashMap<>();
     private AlertDialog alert = null;
     private AlertDialog.Builder builder = null;
     //private AmazonS3Client sS3Client;
@@ -71,12 +73,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         util = new Util(getApplicationContext());
-        projects = util.getAllProjectsFile();
-        System.out.println("The projects arraylist size is: "+projects.size());
-        System.out.println("Project File course name: "+projects.get(0).getCourseTitle());
+        Constants.projects = util.getAllProjectsFile();
+        System.out.println("The projects arraylist size is: "+Constants.projects.size());
+        //System.out.println("Project File course name: "+projects.get(1).getCourseTitle());
 
         recyclerView = findViewById(R.id.allProjectsList);
-        displayList(projects);
+        displayList(Constants.projects);
         btnCreate = findViewById(R.id.btnCreate);
         btnTrack = findViewById(R.id.btnTrack);
         btnQuery = findViewById(R.id.btnQuery);
@@ -123,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        projects.clear();
-        projects = util.getAllProjectsFile();
-        displayList(projects);
+        Constants.projects.clear();
+        Constants.projects = util.getAllProjectsFile();
+        displayList(Constants.projects);
     }
 
-    private void displayList(List<Project> allProjects){
+    private void displayList(Map<Integer, Project> allProjects){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new Adapter(this, allProjects);
         System.out.println("After init Adapter");
@@ -137,8 +139,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy(){
-        save(Constants.PROJECT_NUMBER);
+        //save(Constants.PROJECT_NUMBER);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause(){
+        save(Constants.PROJECT_NUMBER);
+        super.onPause();
     }
 
     public void save(int i){

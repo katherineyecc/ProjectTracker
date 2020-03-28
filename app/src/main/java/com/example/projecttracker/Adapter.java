@@ -9,17 +9,20 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private LayoutInflater inflater;
-    private List<Project> projects;
+    private Map<Integer, Project> projects;
+    private Map<Integer, Integer> adapterMap = new HashMap<>();
     SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
 
-    Adapter(Context context, List<Project> projects){
+    Adapter(Context context, Map<Integer, Project> projects){
         this.inflater = LayoutInflater.from(context);
         this.projects = projects;
     }
@@ -34,21 +37,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i){
         System.out.println("Inside the onBindViewHolder...");
-        System.out.println("project file name: "+projects.get(i).getCourseTitle());
+        System.out.println("project file name: " + projects.get(i).getCourseTitle());
         String courseName = projects.get(i).getCourseTitle();
         Date dueDate = projects.get(i).getDueDate();
         String pDueDate = ft.format(dueDate);
         Boolean isCompleted = projects.get(i).getIsCompleted();
         String projectId = projects.get(i).getProjectNumber();
-
+        adapterMap.put(i, Integer.parseInt(projectId));
+        System.out.println("adapterMap is: <" + i + ", " + Integer.parseInt(projectId) + ">");
         viewHolder.pCourseName.setText(courseName);
         viewHolder.pDueDate.setText(pDueDate);
-        if(isCompleted == true){
+        if (isCompleted == true) {
             viewHolder.pStatus.setText("Completed");
-        } else{
+        } else {
             viewHolder.pStatus.setText("In Progress");
         }
         viewHolder.listId.setText(projectId);
+        //adapterIndex++;
     }
 
     @Override
@@ -69,8 +74,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
+                    System.out.println("Adapter position is: "+ getAdapterPosition());
                     Intent i = new Intent(v.getContext(), Detail.class);
-                    i.putExtra("ID", projects.get(getAdapterPosition()).getProjectNumber());
+                    int projectId = adapterMap.get(getAdapterPosition());
+                    System.out.println("projectId: "+projectId);
+                    i.putExtra("ID", Integer.toString(projectId));
                     v.getContext().startActivity(i);
                 }
             });

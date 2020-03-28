@@ -43,8 +43,11 @@ public class Detail extends AppCompatActivity {
         Intent i = getIntent();
         id = Integer.parseInt(i.getStringExtra("ID"));
         System.out.println("ID: "+id);
-        Project p = MainActivity.projects.get(id-1);
         key = "projectFile" + id + ".txt";
+        Project p = util.getProject(key);
+        if(p == null){
+            System.out.println("p is null");
+        }
         fixProjectNo = findViewById(R.id.cfixProjectNo);
         fixCourseName = findViewById(R.id.cfixCourseName);
         fixInstructorName = findViewById(R.id.cfixInstructorName);

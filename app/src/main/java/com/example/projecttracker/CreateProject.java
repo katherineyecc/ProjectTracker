@@ -94,7 +94,9 @@ public class CreateProject extends AppCompatActivity {
     }
 
     public void uploadProject(){
-        util.uploadWithTransferUtility(project);
+        //util.uploadWithTransferUtility(project);
+        String key = "projectFile"+project.getProjectNumber()+".txt";
+        util.uploadProjectObject(key, project);
         onBackPressed();
         Toast.makeText(this, "Project Created.", Toast.LENGTH_SHORT).show();
     }
