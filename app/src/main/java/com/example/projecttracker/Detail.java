@@ -35,7 +35,8 @@ public class Detail extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent i = getIntent();
-        id = i.getIntExtra("ID", 0);
+        id = Integer.parseInt(i.getStringExtra("ID"));
+        System.out.println("ID: "+id);
         Project p = MainActivity.projects.get(id-1);
         fixProjectNo = findViewById(R.id.cfixProjectNo);
         fixCourseName = findViewById(R.id.cfixCourseName);
