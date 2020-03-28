@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnTrack;
     Button btnQuery;
     Button btnAbout;
-    Util util;
+    static Util util;
     static List<Project> projects = new ArrayList<>();
     private AlertDialog alert = null;
     private AlertDialog.Builder builder = null;
@@ -64,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         readConstant();
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         util = new Util(getApplicationContext());
         projects = util.getAllProjectsFile();
@@ -113,8 +118,14 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
             }
         });
+    }
 
-        //sS3Client = util.getS3Client();
+    @Override
+    protected void onResume(){
+        super.onResume();
+        projects.clear();
+        projects = util.getAllProjectsFile();
+        displayList(projects);
     }
 
     private void displayList(List<Project> allProjects){

@@ -2,17 +2,22 @@ package com.example.projecttracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
 public class Detail extends AppCompatActivity {
     int id;
     View view;
+    String key;
+    Util util;
+    Context context = this;
     TextView fixProjectNo;
     TextView projectNo;
     TextView fixCourseName;
@@ -33,11 +38,13 @@ public class Detail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        util = new Util(getApplicationContext());
 
         Intent i = getIntent();
         id = Integer.parseInt(i.getStringExtra("ID"));
         System.out.println("ID: "+id);
         Project p = MainActivity.projects.get(id-1);
+        key = "projectFile" + id + ".txt";
         fixProjectNo = findViewById(R.id.cfixProjectNo);
         fixCourseName = findViewById(R.id.cfixCourseName);
         fixInstructorName = findViewById(R.id.cfixInstructorName);
@@ -68,6 +75,9 @@ public class Detail extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 // Delete the project
+                MainActivity.util.deleteProject(key);
+                onBackPressed();
+                Toast.makeText(context, "Project Deleted.", Toast.LENGTH_SHORT).show();
             }
         });
         btnModify.setOnClickListener(new View.OnClickListener(){

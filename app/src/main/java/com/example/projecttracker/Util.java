@@ -54,8 +54,6 @@ public class Util {
     private TransferUtility sTransferUtility;
     private List<S3ObjectSummary> s3ObjList;
     private Context context;
-    private boolean downloadCompleted = false;
-    //private CountDownLatch clatch = new CountDownLatch(1);
     List<Project> projects = new ArrayList<>();
 
     public Util(Context context){
@@ -337,6 +335,11 @@ public class Util {
             e.printStackTrace();
         }
         return projects;
+    }
+
+    public void deleteProject(String key){
+        sS3Client.deleteObject(bucketName, key);
+        System.out.println("Deleting the project...");
     }
 
 }
