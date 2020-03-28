@@ -65,7 +65,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         readConstant();
 
+        util = new Util(getApplicationContext());
+        projects = util.getAllProjectsFile();
+        System.out.println("The projects arraylist size is: "+projects.size());
+        System.out.println("Project File course name: "+projects.get(0).getCourseTitle());
+
         recyclerView = findViewById(R.id.allProjectsList);
+        displayList(projects);
         btnCreate = findViewById(R.id.btnCreate);
         btnTrack = findViewById(R.id.btnTrack);
         btnQuery = findViewById(R.id.btnQuery);
@@ -107,12 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
             }
         });
-        util = new Util(getApplicationContext());
+
         //sS3Client = util.getS3Client();
-        projects = util.getAllProjectsFile();
-        System.out.println("The projects arraylist size is: "+projects.size());
-        System.out.println("Project File course name: "+projects.get(0).getCourseTitle());
-        displayList(projects);
     }
 
     private void displayList(List<Project> allProjects){
