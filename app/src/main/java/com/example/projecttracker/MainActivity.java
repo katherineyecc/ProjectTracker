@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnQuery;
     Button btnAbout;
     static Util util;
-    //static Map<Integer, Project> projects = new HashMap<>();
+    static Map<Integer, Project> projects = new HashMap<>();
     private AlertDialog alert = null;
     private AlertDialog.Builder builder = null;
     //private AmazonS3Client sS3Client;
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         util = new Util(getApplicationContext());
         Constants.projects = util.getAllProjectsFile();
+        projects = Constants.projects;
         System.out.println("The projects arraylist size is: "+Constants.projects.size());
         //System.out.println("Project File course name: "+projects.get(1).getCourseTitle());
 
@@ -95,6 +96,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Track the completed projects
+                // Display all the completed projects in a list
+                System.out.println("PROJECT LIST LENGTH: "+projects.size());
+                System.out.println("Project totoal number: "+Constants.PROJECT_NUMBER);
+                String completedProjectNo = "";
+                Project p;
+                boolean projectStatus;
+                for(int i=0; i<Constants.PROJECT_NUMBER; i++){
+                    p = projects.get(i);
+                    if (p != null) {
+                        System.out.println("p is not null, name: "+p.getCourseTitle());
+                        projectStatus = p.getIsCompleted();
+                        if(projectStatus == true){
+                            //use ',' to separate project number
+                            completedProjectNo += p.getProjectNumber() + ",";
+                        }
+                    }
+                }
+                System.out.println("completeProjectNo is: "+completedProjectNo);
+                Intent intent = new Intent(view.getContext(), TrackProject.class);
+                intent.putExtra("completeProjects", completedProjectNo);
+                view.getContext().startActivity(intent);
             }
         });
         btnQuery.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         Constants.projects.clear();
+        readConstant();
         Constants.projects = util.getAllProjectsFile();
         displayList(Constants.projects);
     }
@@ -139,13 +162,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy(){
-        //save(Constants.PROJECT_NUMBER);
+        save(Constants.PROJECT_NUMBER);
         super.onDestroy();
     }
 
     @Override
     protected void onPause(){
         save(Constants.PROJECT_NUMBER);
+        //save(6);
         super.onPause();
     }
 

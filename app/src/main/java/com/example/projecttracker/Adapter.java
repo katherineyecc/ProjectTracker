@@ -36,24 +36,29 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i){
-        System.out.println("Inside the onBindViewHolder...");
-        System.out.println("project file name: " + projects.get(i).getCourseTitle());
-        String courseName = projects.get(i).getCourseTitle();
-        Date dueDate = projects.get(i).getDueDate();
-        String pDueDate = ft.format(dueDate);
-        Boolean isCompleted = projects.get(i).getIsCompleted();
-        String projectId = projects.get(i).getProjectNumber();
-        adapterMap.put(i, Integer.parseInt(projectId));
-        System.out.println("adapterMap is: <" + i + ", " + Integer.parseInt(projectId) + ">");
-        viewHolder.pCourseName.setText(courseName);
-        viewHolder.pDueDate.setText(pDueDate);
-        if (isCompleted == true) {
-            viewHolder.pStatus.setText("Completed");
-        } else {
-            viewHolder.pStatus.setText("In Progress");
+        if(projects.get(i) != null){
+            System.out.println("Inside the onBindViewHolder...");
+            System.out.println("i = "+i);
+            System.out.println("projects size is: "+projects.size());
+            System.out.println("project file name: " + projects.get(i).getCourseTitle());
+            String courseName = projects.get(i).getCourseTitle();
+            Date dueDate = projects.get(i).getDueDate();
+            String pDueDate = ft.format(dueDate);
+            Boolean isCompleted = projects.get(i).getIsCompleted();
+            String projectId = projects.get(i).getProjectNumber();
+            adapterMap.put(i, Integer.parseInt(projectId));
+            System.out.println("adapterMap is: <" + i + ", " + Integer.parseInt(projectId) + ">");
+            viewHolder.pCourseName.setText(courseName);
+            viewHolder.pDueDate.setText(pDueDate);
+            if (isCompleted == true) {
+                viewHolder.pStatus.setText("Completed");
+            } else {
+                viewHolder.pStatus.setText("In Progress");
+            }
+            viewHolder.listId.setText(projectId);
+            //adapterIndex++;
         }
-        viewHolder.listId.setText(projectId);
-        //adapterIndex++;
+
     }
 
     @Override

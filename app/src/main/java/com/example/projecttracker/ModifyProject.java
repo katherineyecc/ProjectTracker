@@ -70,6 +70,7 @@ public class ModifyProject extends AppCompatActivity {
         mstatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("STATUS BUTTON IS CHECKED!");
                 completedIsChecked = true;
             }
         });
