@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 alert = null;
                 builder = new AlertDialog.Builder(MainActivity.this);
                 alert = builder.setTitle("About Us")
-                        .setMessage("Developers: Sonal, Chuchu\nEmails: cye041@uottawa.ca")
+                        .setMessage("Developers: Sonal, Chuchu\nEmails: sdwiv045@uottawaa.ca,\n \tcye041@uottawa.ca")
                         .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
