@@ -27,6 +27,8 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferService;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -52,15 +54,18 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     Adapter adapter;
-    Button btnCreate;
+    /*Button btnCreate;
     Button btnTrack;
     Button btnQuery;
-    Button btnAbout;
+    Button btnAbout;*/
     static Util util;
     static Map<Integer, Project> projects = new HashMap<>();
     private AlertDialog alert = null;
     private AlertDialog.Builder builder = null;
     //private AmazonS3Client sS3Client;
+
+    FloatingActionMenu floatingActionMenu;
+    FloatingActionButton btnCreate,btnTrack, btnQuery, btnAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.allProjectsList);
         displayList(Constants.projects);
-        btnCreate = findViewById(R.id.btnCreate);
-        btnTrack = findViewById(R.id.btnTrack);
-        btnQuery = findViewById(R.id.btnQuery);
-        btnAbout = findViewById(R.id.btnAbout);
+        btnCreate = (FloatingActionButton) findViewById(R.id.btnCreate);
+        btnTrack = (FloatingActionButton) findViewById(R.id.btnTrack);
+        btnQuery = (FloatingActionButton) findViewById(R.id.btnQuery);
+        btnAbout = (FloatingActionButton) findViewById(R.id.btnAbout);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
