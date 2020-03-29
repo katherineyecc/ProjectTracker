@@ -48,19 +48,19 @@ public class Detail extends AppCompatActivity {
         if(p == null){
             System.out.println("p is null");
         }
-        fixProjectNo = findViewById(R.id.cfixProjectNo);
-        fixCourseName = findViewById(R.id.cfixCourseName);
-        fixInstructorName = findViewById(R.id.cfixInstructorName);
-        fixDueDate = findViewById(R.id.cfixDueDate);
-        fixStatus = findViewById(R.id.cfixStatus);
-        fixDescription = findViewById(R.id.cfixDescription);
-        projectNo = findViewById(R.id.cprojectNo);
-        courseName = findViewById(R.id.ccourseName);
-        instructorName = findViewById(R.id.cinstructorName);
-        dueDate = findViewById(R.id.cdueDate);
-        status = findViewById(R.id.cstatus);
-        description = findViewById(R.id.cdescription);
-        btnModify = findViewById(R.id.btncCreate);
+        fixProjectNo = findViewById(R.id.mfixProjectNo);
+        fixCourseName = findViewById(R.id.mfixCourseName);
+        fixInstructorName = findViewById(R.id.mfixInstructorName);
+        fixDueDate = findViewById(R.id.mfixDueDate);
+        fixStatus = findViewById(R.id.mfixStatus);
+        fixDescription = findViewById(R.id.mfixDescription);
+        projectNo = findViewById(R.id.mprojectNo);
+        courseName = findViewById(R.id.mcourseName);
+        instructorName = findViewById(R.id.minstructorName);
+        dueDate = findViewById(R.id.mdueDate);
+        status = findViewById(R.id.mstatus);
+        description = findViewById(R.id.mdescription);
+        btnModify = findViewById(R.id.btncSave);
         btnDelete = findViewById(R.id.btnDelete);
 
         projectNo.setText(p.getProjectNumber());
@@ -87,6 +87,9 @@ public class Detail extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 // Modify the project
+                Intent intent = new Intent(v.getContext(), ModifyProject.class);
+                intent.putExtra("ID", id);
+                v.getContext().startActivity(intent);
             }
         });
     }

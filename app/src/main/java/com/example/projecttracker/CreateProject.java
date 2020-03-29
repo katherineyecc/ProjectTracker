@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -54,26 +52,26 @@ public class CreateProject extends AppCompatActivity {
     }
 
     public void initUI(){
-        cfixProjectNo = findViewById(R.id.cfixProjectNo);
-        cfixCourseName = findViewById(R.id.cfixCourseName);
-        cfixInstructorName = findViewById(R.id.cfixInstructorName);
-        cfixDueDate = findViewById(R.id.cfixDueDate);
-        cfixStatus = findViewById(R.id.cfixDueDate);
-        cfixDecription = findViewById(R.id.cfixDescription);
-        cprojectNo = findViewById(R.id.cprojectNo);
+        cfixProjectNo = findViewById(R.id.mfixProjectNo);
+        cfixCourseName = findViewById(R.id.mfixCourseName);
+        cfixInstructorName = findViewById(R.id.mfixInstructorName);
+        cfixDueDate = findViewById(R.id.mfixDueDate);
+        cfixStatus = findViewById(R.id.mfixDueDate);
+        cfixDecription = findViewById(R.id.mfixDescription);
+        cprojectNo = findViewById(R.id.mprojectNo);
         cprojectNo.setText(Integer.toString(currentProjectNum));
-        ccourseName = findViewById(R.id.ccourseName);
-        cinstructorName = findViewById(R.id.cinstructorName);
-        cdueDate = findViewById(R.id.cdueDate);
-        cstatus = findViewById(R.id.cstatus);
+        ccourseName = findViewById(R.id.mcourseName);
+        cinstructorName = findViewById(R.id.minstructorName);
+        cdueDate = findViewById(R.id.mdueDate);
+        cstatus = findViewById(R.id.mstatus);
         cstatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 completedIsChecked = true;
             }
         });
-        cdescription = findViewById(R.id.cdescription);
-        btncCreate = findViewById(R.id.btncCreate);
+        cdescription = findViewById(R.id.mdescription);
+        btncCreate = findViewById(R.id.btncSave);
         btncCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
