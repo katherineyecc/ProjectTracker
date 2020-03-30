@@ -88,6 +88,11 @@ public class Project implements java.io.Serializable{
     }
 
     public void setIsCompleted(){
-        this.isCompleted = true;
+        if(this.isCompleted == true){
+            this.isCompleted = false;
+        }else{
+            this.isCompleted = true;
+        }
     }
+
 }

@@ -67,7 +67,7 @@ public class CreateProject extends AppCompatActivity {
         cstatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                completedIsChecked = true;
+                cstatus.setChecked(true);
             }
         });
         cdescription = findViewById(R.id.mdescription);

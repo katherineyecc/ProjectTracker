@@ -45,11 +45,10 @@
         android:layout_height="41dp"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="11dp"
-        android:text="Completed"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
         app:layout_constraintBaseline_toBaselineOf="@+id/mfixStatus"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mfixStatus"
-        android:checkMark="?android:attr/listChoiceIndicatorSingle"/>
+        app:layout_constraintStart_toEndOf="@+id/mfixStatus" />
 
     <TextView
         android:id="@+id/mfixDueDate"

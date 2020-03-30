@@ -53,9 +53,4 @@ public class TrackProject extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void displayList(Map<Integer, Project> cprojects){
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this, cprojects);
-        recyclerView.setAdapter(adapter);
-    }
 }

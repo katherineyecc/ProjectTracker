@@ -67,11 +67,18 @@ public class ModifyProject extends AppCompatActivity {
         mcourseName.setText(project.getCourseTitle());
         minstructorName.setText(project.getInstructorName());
         mdueDate.setText(ft.format(project.getDueDate()));
+        if(project.getIsCompleted() == true){
+            mstatus.setText("Change the status to In Progress");
+            //completedIsChecked = true;
+        } else{
+            mstatus.setText("Change the status to Completed");
+            //completedIsChecked = false;
+        }
         mstatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("STATUS BUTTON IS CHECKED!");
-                completedIsChecked = true;
+                mstatus.setChecked(true);
+                project.setIsCompleted();
             }
         });
         mdescription.setText(project.getProjectDescription());
@@ -85,9 +92,6 @@ public class ModifyProject extends AppCompatActivity {
                     project.setDueDate(ft.parse(mdueDate.getText().toString()));
                 }catch(ParseException e) {
                     e.printStackTrace();
-                }
-                if(completedIsChecked == true){
-                    project.setIsCompleted();
                 }
                 project.setProjectDescription(mdescription.getText().toString());
                 uploadProject();

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -40,10 +41,15 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     //private static Bundle bundle;
@@ -60,12 +66,15 @@ public class MainActivity extends AppCompatActivity {
     static Map<Integer, Project> projects = new HashMap<>();
     private AlertDialog alert = null;
     private AlertDialog.Builder builder = null;
-    //private AmazonS3Client sS3Client;
+    SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd");
+    MediaPlayer mediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        playBgm();
         readConstant();
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -75,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         util = new Util(getApplicationContext());
         Constants.projects = util.getAllProjectsFile();
         projects = Constants.projects;
-        System.out.println("The projects arraylist size is: "+Constants.projects.size());
-        //System.out.println("Project File course name: "+projects.get(1).getCourseTitle());
+
+        showWarningMsg();
 
         recyclerView = findViewById(R.id.allProjectsList);
         displayList(Constants.projects);
@@ -123,6 +132,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // another interface to allow queries on the projects
+                // show a report on all uncompleted projects
+                Project p;
+                boolean projectStatus;
+                String uncompletedProjectNo = "";
+                int count = 0;
+                for(int i=0; i<Constants.PROJECT_NUMBER; i++){
+                    p = projects.get(i);
+                    if(p != null){
+                        projectStatus = p.getIsCompleted();
+                        if(projectStatus == false){
+                            uncompletedProjectNo += p.getProjectNumber() + ",";
+                        }
+                    }
+                }
+                Intent intent = new Intent(view.getContext(), TrackProject.class);
+                intent.putExtra("completeProjects", uncompletedProjectNo);
+                view.getContext().startActivity(intent);
             }
         });
         btnAbout.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // pop up name and email
                 alert = null;
+                builder = null;
                 builder = new AlertDialog.Builder(MainActivity.this);
                 alert = builder.setTitle("About Us")
                         .setMessage("Developers: Sonal, Chuchu\nEmails: cye041@uottawa.ca")
@@ -149,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Constants.projects.clear();
         readConstant();
+        mediaPlayer.start();
         Constants.projects = util.getAllProjectsFile();
         displayList(Constants.projects);
     }
@@ -163,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         save(Constants.PROJECT_NUMBER);
+        mediaPlayer.release();
         super.onDestroy();
     }
 
@@ -170,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause(){
         save(Constants.PROJECT_NUMBER);
         //save(6);
+        mediaPlayer.pause();
         super.onPause();
     }
 
@@ -199,11 +229,69 @@ public class MainActivity extends AppCompatActivity {
             projectNumber = reader.read();
             reader.close();
             Constants.PROJECT_NUMBER = projectNumber;
-            //System.out.println("Data retrieved from file. The projectNumber is: " + projectNumber);
+            System.out.println("Data retrieved from file. The projectNumber is: " + Constants.PROJECT_NUMBER);
         }catch(FileNotFoundException e){
             e.printStackTrace();
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void showWarningMsg(){
+        alert = null;
+        builder = null;
+        Project p;
+        int count = 0;
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 2);
+        Date within2Date = c.getTime();
+        Date projectDueDate;
+        String dueMsg = "The following projects will be due in 2 days:\n";
+        System.out.println("CONSTANTS: "+Constants.PROJECT_NUMBER);
+        for(int i=0; i<Constants.PROJECT_NUMBER; i++){
+
+            p = projects.get(i);
+            if (p != null) {
+                projectDueDate = p.getDueDate();
+                if(projectDueDate.before(within2Date)){
+                    dueMsg += "ID: "+p.getProjectNumber()+
+                            " Course: "+p.getCourseTitle()+
+                            "\n";
+                    count++;
+                }
+            }
+        }
+        builder = new AlertDialog.Builder(MainActivity.this);
+        if(count != 0) {
+            alert = builder.setTitle("Warning List")
+                    .setMessage(dueMsg)
+                    .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // do not need operations
+                        }
+                    }).create();
+            alert.show();
+        } else{
+            alert = builder.setTitle("Warning List")
+                    .setMessage("No project are due in 2 days!")
+                    .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // do not need operations
+                        }
+                    }).create();
+            alert.show();
+        }
+    }
+
+    public void playBgm() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.bgm);
+                mediaPlayer.start();
+            }
+        }).start();
     }
 }
