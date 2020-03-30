@@ -1,67 +1,46 @@
 package com.example.projecttracker;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.Callback;
-import com.amazonaws.mobile.client.UserStateDetails;
-import com.amazonaws.mobile.config.AWSConfiguration;
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferService;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
     //private static Bundle bundle;
-    private AWSAppSyncClient mAWSAppSyncClient;
+    //private AWSAppSyncClient mAWSAppSyncClient;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     RecyclerView recyclerView;
     Adapter adapter;
-    Button btnCreate;
+    /*Button btnCreate;
     Button btnTrack;
     Button btnQuery;
-    Button btnAbout;
+    Button btnAbout;*/
     static Util util;
     static Map<Integer, Project> projects = new HashMap<>();
     private AlertDialog alert = null;
@@ -69,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd");
     MediaPlayer mediaPlayer;
 
+
+    FloatingActionMenu floatingActionMenu;
+    FloatingActionButton btnCreate,btnTrack, btnQuery, btnAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.allProjectsList);
         displayList(Constants.projects);
-        btnCreate = findViewById(R.id.btnCreate);
-        btnTrack = findViewById(R.id.btnTrack);
-        btnQuery = findViewById(R.id.btnQuery);
-        btnAbout = findViewById(R.id.btnAbout);
+        btnCreate = (FloatingActionButton) findViewById(R.id.btnCreate);
+        btnTrack = (FloatingActionButton) findViewById(R.id.btnTrack);
+        btnQuery = (FloatingActionButton) findViewById(R.id.btnQuery);
+        btnAbout = (FloatingActionButton) findViewById(R.id.btnAbout);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 builder = null;
                 builder = new AlertDialog.Builder(MainActivity.this);
                 alert = builder.setTitle("About Us")
-                        .setMessage("Developers: Sonal, Chuchu\nEmails: cye041@uottawa.ca")
+                        .setMessage("Developers: Sonal, Chuchu\nEmails: sdwiv045@uottawaa.ca,\n \tcye041@uottawa.ca")
                         .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
