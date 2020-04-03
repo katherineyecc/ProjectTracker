@@ -37,10 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     Adapter adapter;
-    /*Button btnCreate;
-    Button btnTrack;
-    Button btnQuery;
-    Button btnAbout;*/
     static Util util;
     static Map<Integer, Project> projects = new HashMap<>();
     private AlertDialog alert = null;
@@ -50,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     FloatingActionMenu floatingActionMenu;
-    FloatingActionButton btnCreate,btnTrack, btnQuery, btnAbout;
+    FloatingActionButton btnCreate,btnTrack, btnQuery, btnAbout, btnSound;
+    boolean soundFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         btnTrack = (FloatingActionButton) findViewById(R.id.btnTrack);
         btnQuery = (FloatingActionButton) findViewById(R.id.btnQuery);
         btnAbout = (FloatingActionButton) findViewById(R.id.btnAbout);
+        btnSound = (FloatingActionButton) findViewById(R.id.btnSound);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,6 +147,18 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }).create();
                 alert.show();
+            }
+        });
+        btnSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!soundFlag){
+                    soundFlag = true;
+                    musicStatus(soundFlag);
+                }else{
+                    soundFlag = false;
+                    musicStatus(soundFlag);
+                }
             }
         });
     }
@@ -276,4 +286,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    public void musicStatus(boolean status){
+        if(!soundFlag){
+            mediaPlayer.start();
+        }else{
+            mediaPlayer.pause();
+        }
+    }
+
 }

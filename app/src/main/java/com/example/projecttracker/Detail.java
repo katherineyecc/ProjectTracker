@@ -66,7 +66,11 @@ public class Detail extends AppCompatActivity {
         projectNo.setText(p.getProjectNumber());
         courseName.setText(p.getCourseTitle());
         instructorName.setText(p.getInstructorName());
-        dueDate.setText(ft.format(p.getDueDate()));
+        try{
+            dueDate.setText(ft.format(p.getDueDate()));
+        }catch (Exception e){
+            System.out.println("Exception occured");
+        }
         if(p.getIsCompleted() == true){
             status.setText("Completed");
         } else {

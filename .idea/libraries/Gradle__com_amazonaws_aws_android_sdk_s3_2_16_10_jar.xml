@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.amazonaws:aws-android-sdk-s3:2.16.10@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.16.10/3dbca885d36d0d455dbb574f370659f840891e4e/aws-android-sdk-s3-2.16.10.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.16.10/349cc2179109cf77c5462dda4973a5fe094eae38/aws-android-sdk-s3-2.16.10-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.16.10/ca059852b6261d0c3530bcc1103fd6a482f1a8e5/aws-android-sdk-s3-2.16.10-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

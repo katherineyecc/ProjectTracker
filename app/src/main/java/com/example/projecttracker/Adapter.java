@@ -43,7 +43,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             System.out.println("project file name: " + projects.get(i).getCourseTitle());
             String courseName = projects.get(i).getCourseTitle();
             Date dueDate = projects.get(i).getDueDate();
-            String pDueDate = ft.format(dueDate);
+            String pDueDate = "";
+            try{
+                pDueDate = ft.format(dueDate);
+            }catch (Exception e){
+                System.out.println("Exception occured");
+            }
             Boolean isCompleted = projects.get(i).getIsCompleted();
             String projectId = projects.get(i).getProjectNumber();
             adapterMap.put(i, Integer.parseInt(projectId));

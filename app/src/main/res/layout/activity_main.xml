@@ -17,68 +17,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="?attr/actionBarSize" />
 
-    <!--    <Button-->
-    <!--        android:id="@+id/btnCreate"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="68dp"-->
-    <!--        android:layout_marginTop="37dp"-->
-    <!--        android:text="Create"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/allProjectsList" />-->
-
-    <!-- <Button
-        android:id="@+id/btnTrack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="68dp"
-        android:text="Track"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/allProjectsList" />-->
-
-    <!-- <Button
-        android:id="@+id/btnQuery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginBottom="57dp"
-        android:text="Query"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />-->
-
-    <!--<Button
-        android:id="@+id/btnAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="57dp"
-        android:text="ABOUT"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />-->
-
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/floatingActionMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="255dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.931"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/allProjectsList"
-        tools:ignore="MissingConstraints">
-        android:id="@+id/fabMenu"
-        app:menu_fab_label=""
-        app:menu_showShadow="true"
-        tools:layout_editor_absoluteX="338dp"
-        tools:layout_editor_absoluteY="652dp"
-        app:menu_openDirection="up"
         app:menu_backgroundColor="@android:color/transparent"
-        app:menu_labels_text_color="@colors/textColor"
-        app:menu_labels_colorNormal="@colors/bgColor"
+        app:menu_fab_label=""
+        app:menu_labels_colorNormal="#FCF7DE"
         app:menu_labels_colorPressed="@color/colorAccent"
-        >
+        app:menu_labels_text_color="@colors/textColor"
+        app:menu_openDirection="up"
+        app:menu_showShadow="true">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/btnCreate"
@@ -110,6 +64,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/about"
             app:fab_label="About"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/btnSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/soundon"
+            app:fab_label="Sound on/off"
             app:fab_size="mini" />
     </com.github.clans.fab.FloatingActionMenu>
 

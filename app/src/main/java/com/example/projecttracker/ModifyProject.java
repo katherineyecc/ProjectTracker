@@ -66,7 +66,11 @@ public class ModifyProject extends AppCompatActivity {
 
         mcourseName.setText(project.getCourseTitle());
         minstructorName.setText(project.getInstructorName());
-        mdueDate.setText(ft.format(project.getDueDate()));
+        try{
+            mdueDate.setText(ft.format(project.getDueDate()));
+        }catch(Exception e){
+            System.out.println("Exception Occured");
+        }
         if(project.getIsCompleted() == true){
             mstatus.setText("Change the status to In Progress");
             //completedIsChecked = true;
