@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Query"></activity>
         <activity android:name=".WelcomeScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,23 +27,22 @@
         <activity android:name=".TrackProject" />
         <activity android:name=".ModifyProject" />
         <activity android:name=".Detail" />
-        <activity android:name=".CreateProject" />
-<!--        <activity android:name=".DownloadActivity" />-->
-<!--        <activity android:name=".UploadActivity" />-->
-
+        <activity android:name=".CreateProject" /> <!-- <activity android:name=".DownloadActivity" /> -->
+        <!-- <activity android:name=".UploadActivity" /> -->
         <service android:name="org.eclipse.paho.android.service.MqttService" />
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
 
         <activity android:name=".MainActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-
     </application>
 
 </manifest>

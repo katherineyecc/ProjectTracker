@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), CreateProject.class);
-                intent.putExtra("ProjectNumber", Constants.PROJECT_NUMBER);
+                intent.putExtra("ProjectNumber", projects.size()+1);
                 view.getContext().startActivity(intent);
             }
         });
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // another interface to allow queries on the projects
                 // show a report on all uncompleted projects
-                Project p;
+                /*Project p;
                 boolean projectStatus;
                 String uncompletedProjectNo = "";
                 int count = 0;
@@ -128,7 +128,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Intent intent = new Intent(view.getContext(), TrackProject.class);
                 intent.putExtra("completeProjects", uncompletedProjectNo);
+                view.getContext().startActivity(intent);*/
+                Intent intent = new Intent(view.getContext(), Query.class);
                 view.getContext().startActivity(intent);
+
             }
         });
         btnAbout.setOnClickListener(new View.OnClickListener() {
