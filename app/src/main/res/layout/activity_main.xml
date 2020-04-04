@@ -27,10 +27,6 @@
         app:layout_constraintHorizontal_bias="0.931"
         app:layout_constraintStart_toStartOf="parent"
         app:menu_backgroundColor="@android:color/transparent"
-        app:menu_fab_label=""
-        app:menu_labels_colorNormal="#FCF7DE"
-        app:menu_labels_colorPressed="@color/colorAccent"
-        app:menu_labels_text_color="@colors/textColor"
         app:menu_openDirection="up"
         app:menu_showShadow="true">
 
@@ -73,7 +69,7 @@
             android:src="@drawable/soundon"
             app:fab_label="Sound on/off"
             app:fab_size="mini" />
-    </com.github.clans.fab.FloatingActionMenu>
+        </com.github.clans.fab.FloatingActionMenu>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

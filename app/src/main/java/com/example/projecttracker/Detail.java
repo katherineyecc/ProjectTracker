@@ -85,6 +85,8 @@ public class Detail extends AppCompatActivity {
                 MainActivity.util.deleteProject(key);
                 onBackPressed();
                 Toast.makeText(context, "Project Deleted.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                v.getContext().startActivity(intent);
             }
         });
         btnModify.setOnClickListener(new View.OnClickListener(){

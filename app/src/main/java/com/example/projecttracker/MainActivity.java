@@ -239,13 +239,13 @@ public class MainActivity extends AppCompatActivity {
         Date within2Date = c.getTime();
         Date projectDueDate;
         String dueMsg = "The following projects will be due in 2 days:\n";
-        System.out.println("CONSTANTS: "+Constants.PROJECT_NUMBER);
-        for(int i=0; i<Constants.PROJECT_NUMBER; i++){
+        System.out.println("CONSTANTS: "+projects.size());
+        for(int i=0; i<projects.size(); i++){
 
             p = projects.get(i);
             if (p != null) {
                 projectDueDate = p.getDueDate();
-                if(projectDueDate.before(within2Date)){
+                if(projectDueDate.before(within2Date) && !p.getIsCompleted()){
                     dueMsg += "ID: "+p.getProjectNumber()+
                             " Course: "+p.getCourseTitle()+
                             "\n";
